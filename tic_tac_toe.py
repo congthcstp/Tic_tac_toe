@@ -430,12 +430,12 @@ def initialize(size):
     screen.onclick(click)
     screen.setup(screen.screensize()[1]*2,screen.screensize()[1]*2)
     screen.setworldcoordinates(-1,size,size,-1)
-    screen.bgcolor('white')
+    screen.bgcolor('#090e32')
     screen.tracer(500)
     
     colors = {'x':turtle.Turtle(),'o':turtle.Turtle()}
-    colors['x'].color('red')
-    colors['o'].color('blue')
+    colors['o'].color('#5170fd')
+    colors['x'].color('#dc2e44')
   
     for key in colors:
         colors[key].ht()
@@ -443,6 +443,7 @@ def initialize(size):
         colors[key].speed(0)
     
     border = turtle.Turtle()
+    border.color('#00f0ff')
     border.speed(9)
     border.penup()
     
