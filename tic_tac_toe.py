@@ -1,5 +1,4 @@
 import turtle
-import random
 import time
 
 global move_history
@@ -21,19 +20,18 @@ def is_in(board, y, x):
     return 0 <= y < len(board) and 0 <= x < len(board)
 
 def is_win(board):
+    o = score_of_col(board,'o')
+    x = score_of_col(board,'x')
     
-    black = score_of_col(board,'o')
-    white = score_of_col(board,'x')
+    sum_sumcol_values(o)
+    sum_sumcol_values(x)
     
-    sum_sumcol_values(black)
-    sum_sumcol_values(white)
-    
-    if 5 in black and black[5] == 1:
+    if 5 in o and o[5] == 1:
         return 'O won'
-    elif 5 in white and white[5] == 1:
+    elif 5 in x and x[5] == 1:
         return 'X won'
         
-    if sum(black.values()) == black[-1] and sum(white.values()) == white[-1] or possible_moves(board)==[]:
+    if sum(o.values()) == o[-1] and sum(x.values()) == x[-1] or possible_moves(board)==[]:
         return 'Draw'
         
     return 'Continue playing'
@@ -204,7 +202,7 @@ def stupid_score(board,col,anticol,y,x):
     
     #tấn công
     board[y][x]=col
-    #draw_stone(x,y,colors[col])
+    #draw_col(x,y,colors[col])
     sumcol = score_of_col_one(board,col,y,x)       
     a = winning_situation(sumcol)
     adv += a * M
@@ -227,15 +225,15 @@ def stupid_score(board,col,anticol,y,x):
 
 def player_score(board,col,anticol,y,x):
     '''
-    cố gắng di chuyển y,x
-    trả về điểm số tượng trưng lợi thế 
+    Tính điểm nước đi hiện tại của player
+    dựa trên hàm stupid_score()
     '''
     M = 1000
     res, adv, dis = 0, 0, 0
     
     #tấn công
     board[y][x]=col
-    #draw_stone(x,y,colors[col])
+    #draw_col(x,y,colors[col])
     sumcol = score_of_col_one(board,col,y,x)       
     a = winning_situation(sumcol)
     adv += a * M
@@ -318,7 +316,8 @@ def player_best_move(board,col,p_score):
     l_1000 = []
     h_1000 = []
     '''
-    trả lại điểm số của nguoi choi
+    trả về độ chính xác (accuracy) của người chơi
+    dựa trên hàm best_move()
     '''
     if col == 'x':
         anticol = 'o'
@@ -343,8 +342,9 @@ def player_best_move(board,col,p_score):
                 scorelist.append(scorecol)
                 maxscorecol = scorecol
                 movecol = move
+
     if len(move_history) <= 2:
-        return 100
+        return 100.0
     if p_score not in scorelist:
         scorelist.append(p_score)
     scorelist.sort()
@@ -393,7 +393,7 @@ def click(x,y):
     
     if board[y][x] == ' ':
         
-        draw_stone(x,y,colors['o'])
+        draw_col(x,y,colors['o'])
         board[y][x]='o'
         
         move_history.append((y, x))
@@ -406,7 +406,7 @@ def click(x,y):
           
             
         ay,ax = best_move(board,'x')
-        draw_stone(ax,ay,colors['x'])
+        draw_col(ax,ay,colors['x'])
         board[ay][ax]='x'
             
         move_history.append((ay, ax))
@@ -537,7 +537,7 @@ def play_status(player_pos, ai_pos, atk, defnd):
                 print("_", end=" ")
         print()'''
 
-def draw_stone(x,y,colturtle):
+def draw_col(x,y,colturtle):
     colturtle.pensize(5)
     if colturtle == colors['x']:
         colturtle.penup()
@@ -554,5 +554,6 @@ def draw_stone(x,y,colturtle):
         colturtle.pendown()
         colturtle.circle(0.3)
         colturtle.penup()
+
 if __name__ == '__main__':
     initialize(15)
